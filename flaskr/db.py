@@ -29,7 +29,7 @@ def get_db():
 # close_db():     checks if a connection was created by checking if g.db was set
 #                 if the connection exists, it is closed.
 def close_db(e=None):
-    db = g.app('db', None)
+    db = g.pop('db', None)
 
     if db is not None:
         db.close()
