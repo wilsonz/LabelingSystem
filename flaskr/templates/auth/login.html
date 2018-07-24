@@ -1,7 +1,5 @@
-<!--{% extends 'base.html' %}    tells Jinja that this template should
-                                 replace the blocks from the base template.
-    All the rendered content must appear inside{% block %}tags that
-    override blocks from the base template.-->
+<!--This is identical to the register template
+    except the tile and submit button.-->
 {% extends 'base.html' %}
 
 <!--place {% block title %} inside {% block header %}
@@ -9,7 +7,7 @@
     the header block, so the both the window and page share the same title
     without writing it twice.-->
 {% block header %}
-    <h1>{% block title %}Register{% endblock %}</h1>
+    <h1>{% block title %}Log In{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -21,6 +19,6 @@
         <input name="username" id="username" required>
         <label for="password">Password</label>
         <input type="password" name="password" id="password" required>
-        <input type="submit" value="Register">
+        <input type="submit" value="Log In">
     </form>
 {% endblock %}
