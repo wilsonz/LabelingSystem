@@ -27,7 +27,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 #               when Flask receives a request to /auth/register, it will
 #               call the register view & use the return value as the response
 #
-@bp.route('/register'. methods=('GET', 'POST'))
+@bp.route('/register', methods=('GET', 'POST'))
 def register():
     # request.method:   start validating the input if the uesr submitted form.
     if request.method == 'POST':

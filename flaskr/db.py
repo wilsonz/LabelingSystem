@@ -1,6 +1,12 @@
 #
 # Define and Access the DATABASE
 #
+# Any queries and operations are performed using the connection, which is
+# closed after the work is finished.
+# In web app this connection is typically tied to the request.
+# It is created at some point when handling a request,
+# and closed before the response is sent.
+
 import sqlite3
 import click
 from flask import current_app, g
@@ -34,7 +40,7 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-# add func that will run these SQL commands
+# add func that will run the SQL commands
 def init_db():
     # get_db():    returns a database connection, which is used to exe the
     #              commands read from the file.

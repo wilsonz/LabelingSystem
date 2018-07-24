@@ -9,7 +9,7 @@
 <!--{% block title %} will change the title displayed in the browser's tab
                       and window title.-->
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href={{ url_for('static', filename='style.css') }}>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
     <h1>Flaskr</h1>
     <ul>

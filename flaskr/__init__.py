@@ -7,7 +7,10 @@
 import os
 from flask import Flask
 
+###########################################
 # this is the application factory function.
+# Any configuration, registration, and other setup the application needs
+# will happen inside the func, then the application will be returned.
 def create_app(test_config=None):
     # create & configure the app
     # __name__  the name of current py module. it is a convenient
