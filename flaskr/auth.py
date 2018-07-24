@@ -133,4 +133,13 @@ def logout():
 # Creating, editing, and deleting blog posts will require a user to be logged
 # in. A decorator can be used to check this for each view it's applied to.
 def login_required(view):
-    
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+    return wrapped_view
+# this decorator returns a new view func that wraps the original view it
+# applied to. The new func checks if a user is loaded and redirects to the
+# login page otherwise.
