@@ -6,8 +6,8 @@
     each template, each template will extend a base template and override
     specific sections.-->
 <!doctype html>
-<!--{% block title %} will change the title displayed in the browser's tab
-                      and window title.-->
+<!--block title:    will change the title displayed in the browser's tab
+                    and window title.-->
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
@@ -29,14 +29,14 @@
 
 <section class="content">
     <header>
-        <!--{% block header %} will change the title displayed on the page.-->
+        <!--block header:   will change the title displayed on the page.-->
         {% block header %}{% endblock %}
     </header>
     {% for message in get_flashed_messages() %}
         <!--flash()     show error msg-->
         <div class="flash">{{ message }}</div>
     {% endfor %}
-    <!--{% block content %} is where the content of each page goes, such as
-                            the login form or a blog post.-->
+    <!--block content:  is where the content of each page goes, such as
+                        the login form or a blog post.-->
     {% block content %}{% endblock %}
 </section>
