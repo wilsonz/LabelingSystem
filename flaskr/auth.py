@@ -143,3 +143,7 @@ def login_required(view):
 # this decorator returns a new view func that wraps the original view it
 # applied to. The new func checks if a user is loaded and redirects to the
 # login page otherwise.
+
+# url_for():    generates the URL to a view based on a name and args.
+#               The name associated with a view is also called endpoint,
+#               and by default it's the same as the name of the view func.
