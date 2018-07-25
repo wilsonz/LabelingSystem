@@ -1,6 +1,6 @@
 # Define the blueprint and register it in the application factory
 
-from flask import Blueprint, flask, g, redirect
+from flask import Blueprint, flash, g, redirect
 from flask import render_template, request, url_for
 from werkzeug.exceptions import abort
 from flaskr.auth import login_required
