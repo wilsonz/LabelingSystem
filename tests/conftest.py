@@ -17,7 +17,7 @@ with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
 def app():
     # tempfile.mkstemp():   creates and opens a temporary file, returning
     #                       the file object and the path to it.
-    db_fd, dp_path = tempfile.mkstemp()
+    db_fd, db_path = tempfile.mkstemp()
     # /DATABASE/ path:     is overridden so it points to this temporary path
     #                      instead of the instance folder.
     # /TESTING/    tells Flask that the app is in test mode.
