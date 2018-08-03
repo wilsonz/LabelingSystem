@@ -1,3 +1,8 @@
+-- Initialize the database
+-- Drop and existing data and create empty tables.
+-- 在SQLite中，数据储存在 tables 和 columns 中。
+-- Flaskr 会把用户数据储存在 user 表(table)中，把博客内容储存在 post 表(table)中。
+
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
 

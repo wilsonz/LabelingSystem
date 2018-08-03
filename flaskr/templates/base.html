@@ -1,24 +1,12 @@
-<!--This is commence-->
-<!--Templates are files that contain static data as well as placeholders
-    for dynamic data.
-    Each page in the application will have the same basic layout around
-    a different body. Instead of writting the entire HTML structure in
-    each template, each template will extend a base template and override
-    specific sections.-->
 <!doctype html>
-<!--block title:    will change the title displayed in the browser's tab
-                    and window title.-->
-<title>{% block title %}{% endblock %} - Flaskr</title>
+
+<title>{% block title %}{% endblock %} - 标注系统</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-    <h1>Flaskr</h1>
+    <h1><a href="{{ url_for('index') }}">标注系统</a></h1>
     <ul>
-        <!--g is automatically available in templates.-->
         {% if g.user %}
             <li><span>{{ g.user['username'] }}</span>
-            <!--url_for() is also automatically available, and is used to
-                          genereate URLs to views instead of writing them
-                          out manually.-->
             <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
         {% else %}
             <li><a href="{{ url_for('auth.register') }}">Register</a>
@@ -29,14 +17,10 @@
 
 <section class="content">
     <header>
-        <!--block header:   will change the title displayed on the page.-->
         {% block header %}{% endblock %}
     </header>
     {% for message in get_flashed_messages() %}
-        <!--flash()     show error msg-->
         <div class="flash">{{ message }}</div>
     {% endfor %}
-    <!--block content:  is where the content of each page goes, such as
-                        the login form or a blog post.-->
     {% block content %}{% endblock %}
 </section>

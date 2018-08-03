@@ -1,29 +1,23 @@
 {% extends 'base.html' %}
-<!--This template has two forms.
-    The first posts the edited data to the current page(/<id>/update).
-    The other form contains only a button and specifies an action attribute
-    that posts to the delete view instead.-->
 
 {% block header %}
-    <h1>{% block title %}Edit "{{ post['title'] }}"{% endlock %}</h1>
+    <h1>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
     <form method="post">
         <label for="title">Title</label>
-        <!--the pattern '''{{ request.form['title'] or post['title'] }'''
-            used to choose what dat appears in the form.-->
-        <input name="title" id="title" \
+        <input name="title" id="title"
                value="{{ request.form['title'] or post['title'] }}" required>
         <label for="body">Body</label>
-        <textarea name="body" \
+        <textarea name="body"
                   id="body">{{ request.form['body'] or post['body']}}
         </textarea>
         <input type="submit" value="Save">
     </form>
     <hr>
     <form action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
-        <input class="danger" type="submit" value="Delete" \
+        <input class="danger" type="submit" value="Delete"
                onclick="return confirm('Are you sure?');">
     </form>
 {% endblock %}

@@ -21,6 +21,49 @@ from flaskr.db import get_db
 # the url_prefix will be prepended to all the URLs associated with bp.
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+
+# Creating, editing, and deleting blog posts will require a user to be
+# logged in.
+# A decorator can be used to check this for each view it's applied to.
+def login_required(view):
+    '''View decorator that redirects anonymous users to the login page.'''
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+    return wrapped_view
+# this decorator returns a new view func that wraps the original view it
+# applied to. The new func checks if a user is loaded and redirects to the
+# login page otherwise.
+
+# url_for():    generates the URL to a view based on a name and args.
+#               The name associated with a view is also called endpoint,
+#               and by default it's the same as the name of the view func.
+
+
+# Now that the uesr's id is stored in the session
+# bp.before_app_request():    registers a func that runs before the view
+#                             func, no matter what URL is requested.
+@bp.before_app_request
+# load_logged_in_user():    checks if a user is stored in the session and
+#                           gets that user's data from the database,
+#                           storing it on g.user, which lasts for the
+#                           length of the request.
+def load_logged_in_user():
+    '''If a user id is stored in the session, load the user object from
+       the database into ``g.user``.'''
+    user_id = session.get('user_id')
+    # if there's no user id, or if the id doesn't exist, g.user will be None
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+
+
 # the 1st view: register
 #
 # @bp.route:    associates the URL/register with the register view func.
@@ -29,7 +72,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 #
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-    # request.method:   start validating the input if the uesr submitted form.
+    '''Register a new user.
+       Validates that the username is not already taken.
+       Hashes the pw for security.'''
+    # request.method:   start validating the input if the uesr submitted
+    #                   form.
     if request.method == 'POST':
         # request.form:    a special type of dict mapping keys & values.
         username = request.form['username']
@@ -47,10 +94,12 @@ def register():
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
-            error = 'User {} is already registered.'.format(username)
+            error = 'User {0} is already registered.'.format(username)
 
         if error is None:
-            # generate_password_hash():    securely hash the pw and then stored.
+            # the name is available, store it in the database and
+            # go to the login page.
+            # generate_password_hash():   securely hash the pw and then stored.
             db.execute(
                 'INSERT INTO user (username, password) VALUES (?, ?)',
                 (username, generate_password_hash(password))
@@ -61,7 +110,8 @@ def register():
             # redirect():   generates a redirect response to the generated URL.
             return redirect(url_for('auth.login'))
 
-        # flash():  stores msg that can be retrieved when rendering the template
+        # flash():  stores msg that can be retrieved when
+        #           rendering the template
         flash(error)
 
     # render_template():    render a template containing the HTML.
@@ -72,6 +122,7 @@ def register():
 #
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    '''Log in a registered user by adding the user id to the session.'''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -83,9 +134,9 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
-        # check_password_hash():    hashes the submitted password in the same
-        #                           way as the stored hash and securely
-        #                           compares them.
+        # check_password_hash():    hashes the submitted password in the
+        #                           same way as the stored hash and
+        #                           securely compares them.
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
 
@@ -102,48 +153,10 @@ def login():
     return render_template('auth/login.html')
 
 
-    # Now that the uesr's id is stored in the session
-    # bp.before_app_request():    registers a func that runs before the view
-    #                             func, no matter what URL is requested.
-    @bp.before_app_request
-    # load_logged_in_user():    checks if a user is stored in the session and
-    #                           gets that user's data from the database,
-    #                           storing it on g.user, which lasts for the
-    #                           length of the request.
-    def load_logged_in_user():
-        user_id = session.get('user_id')
-
-    # if there's no user id, or if the id doesn't exist, g.user will be None
-        if user_id is None:
-            g.user = None
-        else:
-            g.user = get_db().execute(
-                'SELECTE * FROM user WHERE id = ?', (user_id,)
-            ).fetchone()
-
-
 # To log out, u need to remove the uesr id from the session.
 # Then load_logged_in_user won't load a user on subsequent requests.
 @bp.route('/logout')
 def logout():
+    '''Clear the current session, including the stored user id.'''
     session.clear()
     return redirect(url_for('index'))
-
-
-# Creating, editing, and deleting blog posts will require a user to be logged
-# in. A decorator can be used to check this for each view it's applied to.
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-    return wrapped_view
-# this decorator returns a new view func that wraps the original view it
-# applied to. The new func checks if a user is loaded and redirects to the
-# login page otherwise.
-
-# url_for():    generates the URL to a view based on a name and args.
-#               The name associated with a view is also called endpoint,
-#               and by default it's the same as the name of the view func.

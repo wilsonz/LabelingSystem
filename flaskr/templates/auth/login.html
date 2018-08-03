@@ -1,11 +1,5 @@
 {% extends 'base.html' %}
-<!--This is identical to the register template
-    except the tile and submit button.-->
 
-<!--place '''block title''' inside '''block header'''
-    This will set the title block and then output the value of it into
-    the header block, so the both the window and page share the same title
-    without writing it twice.-->
 {% block header %}
     <h1>{% block title %}Log In{% endblock %}</h1>
 {% endblock %}
@@ -13,9 +7,6 @@
 {% block content %}
     <form method="post">
         <label for="username">Username</label>
-        <!--input tags are using the required attribute here.
-            This tells the brower not to submit the form until
-            those fields are filled in.-->
         <input name="username" id="username" required>
         <label for="password">Password</label>
         <input type="password" name="password" id="password" required>
